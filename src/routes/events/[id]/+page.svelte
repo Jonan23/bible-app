@@ -12,9 +12,9 @@
   const queryClient = useQueryClient();
 
   const detailQuery = createQuery({
-    queryKey: () => ['event-detail', $page.params.id],
-    queryFn: () => api.events.getById($page.params.id),
-    enabled: () => !!$page.params.id,
+    queryKey: ['event-detail', $page.params.id ?? ''],
+    queryFn: () => api.events.getById($page.params.id ?? ''),
+    enabled: !!$page.params.id,
   });
 
   let event = $derived($detailQuery.data ? toEventCard($detailQuery.data) : null);

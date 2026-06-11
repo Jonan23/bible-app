@@ -63,7 +63,7 @@ function createThemeStore() {
     },
     toggle() {
       const next = resolved === 'dark' ? 'light' : 'dark';
-      setMode(next);
+      this.setMode(next);
     },
   };
 }

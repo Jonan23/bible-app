@@ -7,7 +7,7 @@
   import Card from '$lib/components/ui/Card.svelte';
   import { ABOUT } from '$lib/constants';
   import { theme } from '$lib/stores/theme.svelte';
-  import { Globe, ArrowRight } from 'lucide-svelte';
+  import { Globe, ArrowRight, Settings } from 'lucide-svelte';
 
   const pastorsQuery = createQuery({
     queryKey: ['pastors'],
@@ -19,8 +19,8 @@
     queryFn: () => api.teamMembers.list({ type: 'TEAM_MEMBER' }),
   });
 
-  let pastors = $derived((pastorsQuery.data?.data ?? []).map(toPastor));
-  let team = $derived((teamQuery.data?.data ?? []).map(toTeamMember));
+  let pastors = $derived(($pastorsQuery.data?.data ?? []).map(toPastor));
+  let team = $derived(($teamQuery.data?.data ?? []).map(toTeamMember));
 </script>
 
 <svelte:head>
@@ -110,5 +110,11 @@
       Submit a Prayer Request
       <ArrowRight size={18} />
     </Button>
+    <div class="mt-3">
+      <Button href="/settings" variant="ghost" size="sm">
+        <Settings size={16} />
+        Settings
+      </Button>
+    </div>
   </section>
 </div>

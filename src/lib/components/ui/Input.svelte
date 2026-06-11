@@ -1,7 +1,7 @@
 <script lang="ts">
   let {
     type = 'text',
-    value,
+    value = $bindable(''),
     placeholder,
     label,
     error,

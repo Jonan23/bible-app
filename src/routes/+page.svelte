@@ -5,8 +5,23 @@
   import { HERO_BANNER } from '$lib/constants';
   import SuggestionsSection from '$lib/components/home/SuggestionsSection.svelte';
   import DataStateHandler from '$lib/components/DataStateHandler.svelte';
+  import BookOpen from 'lucide-svelte/icons/book-open';
+  import Quote from 'lucide-svelte/icons/quote';
+  import type { BackendDailyContent } from '$lib/types/backend';
 
   const queryClient = useQueryClient();
+
+  const dailyQuery = createQuery({
+    queryKey: ['daily-content'],
+    queryFn: async () => {
+      try {
+        return await api.dailyContent.getToday();
+      } catch {
+        return null;
+      }
+    },
+    retry: false,
+  });
 
   const videosQuery = createQuery({
     queryKey: ['home-videos'],
@@ -31,6 +46,8 @@
 
   let pageLoading = $derived($videosQuery.isLoading || $blogQuery.isLoading || $eventsQuery.isLoading);
   let pageError = $derived($videosQuery.isError || $blogQuery.isError || $eventsQuery.isError);
+
+  let dailyContent = $derived($dailyQuery.data as BackendDailyContent | null | undefined);
 </script>
 
 <svelte:head>
@@ -54,6 +71,36 @@
             <p class="text-sm sm:text-base text-white/80">{featuredVideo.speaker}</p>
           </div>
         </a>
+      </div>
+    {/if}
+
+    {#if $dailyQuery.isLoading}
+      <div class="pt-4 sm:pt-6 mb-4 sm:mb-6">
+        <div class="h-20 rounded-xl bg-navy-50/50 dark:bg-navy-800/30 animate-pulse"></div>
+      </div>
+    {:else if dailyContent}
+      <div class="pt-4 sm:pt-6 mb-4 sm:mb-6">
+        <div class="rounded-xl bg-cream-50 dark:bg-navy-800/20 border-l-4 border-navy-500 dark:border-navy-400 p-4 sm:p-5 shadow-sm">
+          {#if dailyContent.type === 'verse'}
+            <div class="flex items-start gap-3">
+              <BookOpen class="w-5 h-5 text-navy-500 dark:text-navy-300 mt-0.5 shrink-0" />
+              <div>
+                <p class="text-sm font-semibold text-navy-700 dark:text-navy-200">{dailyContent.reference}</p>
+                <p class="text-sm sm:text-base text-navy-800 dark:text-navy-100 mt-1 italic">&ldquo;{dailyContent.content}&rdquo;</p>
+              </div>
+            </div>
+          {:else}
+            <div class="flex items-start gap-3">
+              <Quote class="w-5 h-5 text-navy-500 dark:text-navy-300 mt-0.5 shrink-0" />
+              <div>
+                <p class="text-sm sm:text-base text-navy-800 dark:text-navy-100 italic">&ldquo;{dailyContent.content}&rdquo;</p>
+                {#if dailyContent.author}
+                  <p class="text-xs text-navy-600 dark:text-navy-400 mt-1">&mdash; {dailyContent.author}</p>
+                {/if}
+              </div>
+            </div>
+          {/if}
+        </div>
       </div>
     {/if}
 

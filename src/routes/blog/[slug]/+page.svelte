@@ -12,13 +12,13 @@
   const queryClient = useQueryClient();
 
   const detailQuery = createQuery({
-    queryKey: () => ['blog-detail', $page.params.slug],
-    queryFn: () => api.blog.getBySlug($page.params.slug),
-    enabled: () => !!$page.params.slug,
+    queryKey: ['blog-detail', $page.params.slug ?? ''],
+    queryFn: () => api.blog.getBySlug($page.params.slug ?? ''),
+    enabled: !!$page.params.slug,
   });
 
   const relatedQuery = createQuery({
-    queryKey: () => ['blog-related'],
+    queryKey: ['blog-related'],
     queryFn: () => api.blog.list({ limit: 3 }),
   });
 

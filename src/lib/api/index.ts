@@ -1,5 +1,6 @@
 import { authApi } from './auth';
 import { blogApi } from './blog';
+import { dailyContentApi } from './daily-content';
 import { videosApi } from './videos';
 import { eventsApi } from './events';
 import { categoriesApi } from './categories';
@@ -16,6 +17,7 @@ import { preferencesApi } from './preferences';
 export const api = {
   auth: authApi,
   blog: blogApi,
+  dailyContent: dailyContentApi,
   videos: videosApi,
   events: eventsApi,
   categories: categoriesApi,

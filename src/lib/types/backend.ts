@@ -121,6 +121,21 @@ export interface BackendTeamMember {
   sortOrder: number;
 }
 
+export interface BackendDailyContent {
+  id: string;
+  type: 'verse' | 'quote';
+  content: string;
+  book: string | null;
+  chapter: number | null;
+  verse: number | null;
+  reference: string | null;
+  author: string | null;
+  date: string | null;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface BackendMinistryNews {
   id: string;
   title: string;

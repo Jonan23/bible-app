@@ -14,9 +14,9 @@
   const queryClient = useQueryClient();
 
   const detailQuery = createQuery({
-    queryKey: () => ['video-detail', $page.params.id],
-    queryFn: () => api.videos.getById($page.params.id),
-    enabled: () => !!$page.params.id,
+    queryKey: ['video-detail', $page.params.id ?? ''],
+    queryFn: () => api.videos.getById($page.params.id ?? ''),
+    enabled: !!$page.params.id,
   });
 
   const suggestedQuery = createQuery({

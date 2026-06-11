@@ -23,10 +23,10 @@
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['notifications'] }),
   });
 
-  let notifications = $derived(notificationsQuery.data?.data ?? []);
+  let notifications = $derived(($notificationsQuery.data?.data ?? []));
 
   let mappedNotifications = $derived(
-    notifications.map((n) => {
+    notifications.map((n: any) => {
       const recipient = n.recipients?.[0];
       return {
         id: n.id,
@@ -39,7 +39,7 @@
     })
   );
 
-  let unreadCount = $derived(mappedNotifications.filter((n) => !n.read).length);
+  let unreadCount = $derived(mappedNotifications.filter((n: any) => !n.read).length);
   const typeIcons: Record<string, typeof Bell> = {
     sermon: Play, event: Calendar, news: Newspaper, prayer: Heart, general: Bell,
   };
@@ -54,8 +54,8 @@
     <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-navy-900 dark:text-cream-50">Notifications</h1>
     {#if unreadCount > 0}
       <button
-        onclick={() => markAllReadMutation.mutate()}
-        disabled={markAllReadMutation.isPending}
+        onclick={() => $markAllReadMutation.mutate()}
+        disabled={$markAllReadMutation.isPending}
         class="text-sm font-medium text-navy-500 dark:text-cream-300 hover:text-navy-700 dark:hover:text-cream-200 transition-colors disabled:opacity-50 shrink-0"
       >
         {NOTIFICATIONS.markAllRead}
@@ -64,9 +64,9 @@
   </div>
 
   <DataStateHandler
-    loading={notificationsQuery.isLoading}
-    error={notificationsQuery.isError}
-    onretry={() => notificationsQuery.refetch()}
+    loading={$notificationsQuery.isLoading}
+    error={$notificationsQuery.isError}
+    onretry={() => queryClient.invalidateQueries({ queryKey: ['notifications'] })}
     empty={mappedNotifications.length === 0}
     emptyTitle={NOTIFICATIONS.emptyTitle}
     emptyMessage={NOTIFICATIONS.emptyMessage}
@@ -75,7 +75,7 @@
       {#each mappedNotifications as notification}
         {@const Icon = typeIcons[notification.type] || Bell}
         <button
-          onclick={() => { if (!notification.read) markReadMutation.mutate(notification.id); }}
+          onclick={() => { if (!notification.read) $markReadMutation.mutate(notification.id); }}
           class="w-full text-left flex items-start gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl transition-colors
             {notification.read
               ? 'bg-white dark:bg-navy-800'

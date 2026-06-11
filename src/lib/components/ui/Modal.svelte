@@ -1,5 +1,6 @@
 <script lang="ts">
   import { X } from 'lucide-svelte';
+  import { fade, scale } from 'svelte/transition';
 
   let {
     open,
@@ -35,14 +36,16 @@
 <svelte:window onkeydown={handleKeydown} />
 
 {#if open}
+  <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
   <div
     class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
     onclick={handleBackdrop}
     role="dialog"
     aria-modal="true"
     tabindex="-1"
-    transition:opacity={{ duration: 150 }}
+    transition:fade={{ duration: 150 }}
   >
+    <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_static_element_interactions -->
     <div
       class="w-full {widths[size]} bg-white dark:bg-navy-800 rounded-2xl shadow-2xl max-h-[85vh] overflow-hidden"
       transition:scale={{ start: 0.95, duration: 150 }}
